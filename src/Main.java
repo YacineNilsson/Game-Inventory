@@ -1,7 +1,6 @@
 import Armour_classes.Armour;
 import Consumable_classes.DefensiveConsumable;
 import Enemy.Enemy;
-import Inventory.Inventory;
 import Player.Player;
 import Shop.Shop;
 import Weapon_Classes.MeleeWeapon;
@@ -44,12 +43,6 @@ public class Main {
         shop.getInventory().addItem(chestArmour);
         shop.getInventory().addItem(healingPotion);
 
-//        shortSword.setEquipped(true);
-//        player.equipItem(shortSword);
-//        player.getEquippedInventory().showItems();
-//        enemy.setHealth(0);
-//        enemy.dropLoot(player);
-
 
         // Första menyn
         while (true) {
@@ -62,22 +55,28 @@ public class Main {
             System.out.print("Choose an option: ");
 
             int choice = scanner.nextInt();
-            scanner.nextLine(); // viktig för någon buffer-grej efter scanner.nextInt()
+            scanner.nextLine();
 
             switch (choice) {
                 case 1:
-                    System.out.println("You are going on an adventure!");
+                    System.out.println("\nDetta är endast ett grovt simplifierat exempel på hur en strid kan se ut!\nDet är inte dina vapen som används men du får looten");
+                    System.out.println("\nYou are going on an adventure!");
                     System.out.println("You encountered an enemy: " + enemy.getName());
-                    enemy.takeDamage(shortSword.getMeleeDamage());
+                    enemy.takeDamage(smallBow.getMeleeDamage());
+                    smallBow.meleeAttack();
                     player.takeDamage(enemy.getDamage());
                     enemy.takeDamage(shortSword.getMeleeDamage());
+                    shortSword.meleeAttack();
+                    player.takeDamage(enemy.getDamage());
+                    enemy.takeDamage(smallBow.getMeleeDamage());
+                    smallBow.meleeAttack();
                     enemy.dropLoot(player);
                     break;
                 case 2:
                     openInventory(player, scanner);
                     break;
                 case 3:
-                    System.out.println("Player Stats:");
+                    System.out.println("\nPlayer Stats:");
                     System.out.println("Name: " + player.getName());
                     System.out.println("Health: " + player.getHealth() + "/" + player.getMaxHealth());
                     System.out.println("Gold: " + player.getGold());
@@ -100,7 +99,7 @@ public class Main {
     }
 
 
-    // Funktion för att öppna inventariet och alternativ
+    // Inventory menyn
     public static void openInventory(Player player, Scanner scanner) {
         while (true) {
             System.out.println("\n--- Inventory Menu ---");
@@ -108,7 +107,7 @@ public class Main {
             System.out.println("2. Use item");
             System.out.println("3. Remove item");
             System.out.println("4. Equip item");
-            System.out.println("5. Exit");
+            System.out.println("5. Return to game menu");
             System.out.print("Choose an option: ");
 
             int inventoryChoice = scanner.nextInt();
@@ -116,7 +115,7 @@ public class Main {
 
             switch (inventoryChoice) {
                 case 1:
-                    System.out.println("Your Inventory:");
+                    System.out.println("\nYour Inventory:");
                     player.getInventory().showItems();
                     break;
                 case 2:
@@ -124,7 +123,7 @@ public class Main {
                     // useItem för Usable items, annat "can't be used right now"
                     break;
                 case 3:
-                    System.out.println("Items here will be removed. If you want to sell an item you'll have to visit shop");
+                    System.out.println("\nItems here will be removed. If you want to sell an item you'll have to visit shop");
                     removeOption(player, scanner);
                     break;
                 case 4:
@@ -138,31 +137,26 @@ public class Main {
         }
     }
 
+    // Använda ett useble-objekt
     public static void useOption(Player player, Scanner scanner) {
         while (true) {
-            // Visa alla items av typen "Consumable potion"
             player.getInventory().showItemsByType("Consumable potion");
 
-            // Fråga spelaren om de vill använda ett objekt eller avsluta
             System.out.println("\nDo you want to use a potion? (y/n)");
             String choice = scanner.nextLine();
 
-            // Om spelaren väljer 'n' avslutar vi loopen
             if (choice.equalsIgnoreCase("n")) {
                 break;
             }
 
-            // Om spelaren vill använda ett objekt
             if (choice.equalsIgnoreCase("y")) {
                 System.out.println("Enter the name of the potion you want to use: ");
                 String itemName = scanner.nextLine();
 
-                // Försök hitta föremålet i spelarens inventory
                 Item itemToUse = player.getInventory().findItemByName(itemName);
 
                 //nu kan vi bara annvända defensive consumables. lös så att du också kan använda andra
                 if (itemToUse != null && itemToUse instanceof DefensiveConsumable) {
-                    // Använd föremålet
                     ((DefensiveConsumable) itemToUse).useItem(player); // Plugga in detta och förstå vad du har skrivit
 
                 } else {
@@ -262,12 +256,14 @@ public class Main {
         }
     }
 
+    // Shop menyn
     public static void openShop(Player player, Shop shop, Scanner scanner) {
         while (true) {
-            System.out.println("\n1. Buy");
+            System.out.println("\n--- Shop Menu ---");
+            System.out.println("1. Buy");
             System.out.println("2. Sell");
             System.out.println("3. Repair");
-            System.out.println("4. Exit");
+            System.out.println("4. Return to game menu");
             System.out.print("Choose an option: ");
 
             int switchChoice = scanner.nextInt();
@@ -281,11 +277,9 @@ public class Main {
                     sellOption(player, scanner);
                     break;
                 case 3:
-                    //repairOption();
-                    System.out.println("\nUNDER CONSTRUCTION!");
+                    System.out.println("\nUNDER CONSTRUCTION! Just nu kan du inte strida så därför dina vapen kan inte skadas");
                     repairOption(player, scanner);
                     break;
-
                 case 4:
                     return;
                 default:
@@ -321,6 +315,7 @@ public class Main {
 
     public static void sellOption(Player player, Scanner scanner) {
         while (true) {
+            System.out.println("\nItems you can sell:");
             player.getInventory().showItems();
             System.out.println("\nDo you want to sell an item? (y/n)");
             String choice = scanner.nextLine();
@@ -343,27 +338,45 @@ public class Main {
 
     public static void repairOption(Player player, Scanner scanner) {
         while (true) {
-            player.getEquippedInventory().showItems();
+
+            player.getEquippedInventory().showItemsWithLessDurability();
+            System.out.println("Items to repair:");
             System.out.println("\nDo you want to repair an item? (y/n)");
             String choice = scanner.nextLine();
+
             if (choice.equalsIgnoreCase("n")) {
                 break;
             }
+
             if (choice.equalsIgnoreCase("y")) {
                 System.out.println("Enter the name of the item you want to repair: ");
                 String itemName = scanner.nextLine();
+
                 Item itemToRepair = player.getEquippedInventory().findItemByName(itemName);
-                if (itemToRepair != null && itemToRepair instanceof Armour) {
-                    ((Armour)itemToRepair).durabilityRepair();
-                    player.subtractGold(itemToRepair.getRepairCost());
-                } else if (itemToRepair !=null && itemToRepair instanceof Weapon); {
-                    ((Weapon)itemToRepair).durabilityRepair();
-                    player.subtractGold(itemToRepair.getRepairCost());
+                if (itemToRepair != null) {
+                    if (itemToRepair instanceof Armour) {
+                        ((Armour) itemToRepair).durabilityRepair();
+                        if (((Armour) itemToRepair).getDurability() < ((Armour) itemToRepair).getMaxDurability()) {
+                            player.subtractGold(itemToRepair.getRepairCost());
+                        }
+                    } else if (itemToRepair instanceof Weapon) {
+                        ((Weapon) itemToRepair).durabilityRepair();
+                        if (((Weapon) itemToRepair).getDurability() < ((Weapon) itemToRepair).getMaxDurability()) {
+                            player.subtractGold(itemToRepair.getRepairCost());
+                        }
+                    }
+                } else {
+                    System.out.println("Item not found in inventory.");
                 }
+            } else {
+                System.out.println("Invalid option. Please try again.");
             }
         }
     }
+
 }
+
+
 
 //    private static void playerAttack(Player player, Enemy enemy, MeleeWeapon meleeWeapon, RangedWeapon rangedWeapon) {
 //        int damage = 0;

@@ -1,9 +1,12 @@
 package Inventory;
 
+import Armour_classes.Armour;
 import Enemy.Enemy;
 import Item.Item;
 import Player.Player;
 import Shop.Shop;
+import Weapon_Classes.Weapon;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -105,5 +108,20 @@ public class Inventory {
         }
         return false;
     }
+
+    public void showItemsWithLessDurability() {
+        for (Item item : equippedItems) {
+            if (item instanceof Weapon) {
+                if (((Weapon) item).getDurability() < ((Weapon) item).getMaxDurability()) {
+                    System.out.println(item.getName() + " - Durability: " + ((Weapon) item).getDurability());
+                }
+            } else if (item instanceof Armour) {
+                if (((Armour) item).getDurability() < ((Armour) item).getMaxDurability()) {
+                    System.out.println(item.getName() + " - Durability: " + ((Armour) item).getDurability());
+                }
+            }
+        }
+    }
+
 
 }
