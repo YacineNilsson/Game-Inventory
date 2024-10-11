@@ -59,7 +59,7 @@ public class Main {
 
             switch (choice) {
                 case 1:
-                    System.out.println("\nDetta är endast ett grovt simplifierat exempel på hur en strid kan se ut!\nDet är inte dina vapen som används men du får looten");
+                    System.out.println("\nDetta är endast ett grovt simplifierat exempel på hur en strid kan se ut!\nDet är inte dina vapen som används men du får looten och tar skada");
                     System.out.println("\nYou are going on an adventure!");
                     System.out.println("You encountered an enemy: " + enemy.getName());
                     enemy.takeDamage(smallBow.getMeleeDamage());
@@ -140,6 +140,7 @@ public class Main {
     // Använda ett useble-objekt
     public static void useOption(Player player, Scanner scanner) {
         while (true) {
+            System.out.println("\nItems you can use:");
             player.getInventory().showItemsByType("Consumable potion");
 
             System.out.println("\nDo you want to use a potion? (y/n)");
@@ -191,6 +192,7 @@ public class Main {
 
     public static void equipOption(Player player, Scanner scanner) { //Item item
         while (true) {
+            System.out.println("\nItems you can equip:");
             player.getInventory().showItems();
 
             System.out.println("\nDo you want to equip an item? (y/n)");

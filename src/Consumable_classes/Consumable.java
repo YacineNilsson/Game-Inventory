@@ -51,8 +51,8 @@ public class Consumable extends Item implements Equippable {
     @Override
     public void unequip() {
         if (isEquipped()) {
-            setEquipped(false); // Markera consumable som inte längre utrustat
-            equippedConsumables--; // Minska räknaren
+            setEquipped(false); // Markera consumable som inte längre equipped
+            equippedConsumables--;
             System.out.println(getName() + " has been unequipped. Total equipped consumables: " + equippedConsumables);
         } else {
             System.out.println(getName() + " is not equipped.");

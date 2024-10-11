@@ -9,7 +9,6 @@ import Weapon_Classes.Weapon;
 
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Inventory {
     private ArrayList<Item> items;
@@ -82,7 +81,6 @@ public class Inventory {
     }
 
     public void showItemsByType(String type) {
-        System.out.println("Items you can use:");
         for (Item item : items) {  // Antar att 'items' är din lista över föremål
             if (item.getType().equals(type)) {  // Filtrera baserat på typ
                 System.out.println("Name: " + item.getName() + ", Value: " + item.getValue() + ", Type: " + item.getType());
@@ -98,15 +96,6 @@ public class Inventory {
             }
         }
         return null;
-    }
-
-    public boolean findItemByIsEquipped() {
-        for (Item item : items) {
-            if (item.isEquipped()) {
-                return item.isEquipped();
-            }
-        }
-        return false;
     }
 
     public void showItemsWithLessDurability() {

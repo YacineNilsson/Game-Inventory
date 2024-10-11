@@ -96,11 +96,11 @@ public class Player {
         if (item.isEquipped()) {
             inventory.removeItem(item);
             equippedInventory.addItem(item);
-        }
+        } else { System.out.println(name + " can't equip " + item.getName() + ". Maximum of 5 potions can be equipped."); }
     }
 
     public void unequipItem(Item item) {
-        if (inventory.findItemByIsEquipped()==false) { // lägg till i main
+        if (!item.isEquipped()) { // lägg till i main
             equippedInventory.removeItem(item);
             inventory.addItem(item);
         }
